@@ -18,7 +18,7 @@
         <el-form-item>
           <el-button type="primary" @click="handleSearch">搜索</el-button>
           <el-button @click="handleReset">重置</el-button>
-        </el-formItem>
+        </el-form-item>
       </el-form>
 
       <el-table :data="tableData" stripe v-loading="loading">
@@ -45,7 +45,7 @@
           <template #default="{ row }">
             <el-switch
               :model-value="row.status === 1"
-              @change="(val: boolean) => handleStatusChange(row.id, val)"
+              @change="(val: any) => handleStatusChange(row.id, val)"
             />
           </template>
         </el-table-column>

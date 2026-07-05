@@ -2,26 +2,23 @@ import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/store/modules/user'
 
-const service = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '',
+const authRequest = axios.create({
+  baseURL: '/auth',
   timeout: 15000
 })
 
-service.interceptors.request.use(
+authRequest.interceptors.request.use(
   (config) => {
     const userStore = useUserStore()
     if (userStore.token) {
       config.headers.Authorization = `Bearer ${userStore.token}`
-    }
-    if (userStore.userId) {
-      config.headers['X-User-Id'] = userStore.userId
     }
     return config
   },
   (error) => Promise.reject(error)
 )
 
-service.interceptors.response.use(
+authRequest.interceptors.response.use(
   (response) => {
     const res = response.data
     if (res.code !== 200) {
@@ -41,4 +38,4 @@ service.interceptors.response.use(
   }
 )
 
-export default service
+export default authRequest

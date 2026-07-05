@@ -15,7 +15,8 @@ export const useAppStore = defineStore(
       device.value = val
     }
 
-    return { sidebarCollapsed, device, toggleSidebar, setDevice },
+    return { sidebarCollapsed, device, toggleSidebar, setDevice }
+  },
   {
     persist: {
       key: 'blog-app-store',

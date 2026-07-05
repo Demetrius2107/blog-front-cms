@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <div class="login-card">
-      <h2 class="title">博客后台管理系统</h2>
+      <h2 class="title">MyBlog 登录</h2>
       <el-form ref="formRef" :model="loginForm" :rules="rules" size="large">
         <el-form-item prop="username">
           <el-input v-model="loginForm.username" placeholder="请输入用户名" prefix-icon="User" />
@@ -31,6 +31,7 @@ import { ref, reactive } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useUserStore } from '@/store/modules/user'
 import { loginApi } from '@/api/auth'
+import { getUserInfoApi } from '@/api/user'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 
 const router = useRouter()
@@ -52,11 +53,17 @@ async function handleLogin() {
 
   loading.value = true
   try {
-    const res: any = await loginApi(loginForm)
-    userStore.setToken(res.data.token)
-    userStore.setUserInfo(res.data.userInfo)
+    const res = await loginApi(loginForm)
+    userStore.setToken(res.data.token || res.data)
+
+    // 获取用户信息
+    const userRes = await getUserInfoApi()
+    userStore.setUserInfo(userRes.data)
+
     ElMessage.success('登录成功')
     router.push((route.query.redirect as string) || '/')
+  } catch {
+    // 错误已在拦截器中处理
   } finally {
     loading.value = false
   }

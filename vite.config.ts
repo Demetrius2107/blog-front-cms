@@ -24,12 +24,15 @@ export default defineConfig({
     }
   },
   server: {
-    port: 3000,
+    port: 5173,
     proxy: {
       '/api': {
         target: 'http://localhost:8080',
-        changeOrigin: true,
-        rewrite: (p) => p.replace(/^\/api/, '')
+        changeOrigin: true
+      },
+      '/auth': {
+        target: 'http://localhost:8080',
+        changeOrigin: true
       }
     }
   },

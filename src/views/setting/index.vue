@@ -67,7 +67,7 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="handleSaveUpload">保存设置</el-button>
-            </el-formItem>
+            </el-form-item>
           </el-form>
         </el-tab-pane>
       </el-tabs>
