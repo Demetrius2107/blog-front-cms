@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { useUserStore } from '@/store/modules/user'
+import logger from '@/utils/logger'
 
 NProgress.configure({ showSpinner: false })
 
@@ -151,6 +152,19 @@ router.beforeEach((to, _from, next) => {
   document.title = `${to.meta.title || ''} - MyBlog`
 
   const userStore = useUserStore()
+
+  // █████████████████████████████████████████████████████████████████
+  // 🎯 埋点: 路由导航追踪
+  //    每次页面跳转都会记录来源页和目标页，
+  //    配合权限信息排查未登录跳转或权限拒绝问题
+  // █████████████████████████████████████████████████████████████████
+  logger.route(_from.path || '/', to.path, {
+    title: to.meta.title,
+    requiresAuth: !!to.meta.requiresAuth,
+    requiresAdmin: !!to.meta.requiresAdmin,
+    hasToken: !!userStore.token,
+    role: userStore.userInfo?.role
+  })
 
   // 需要登录但未登录 → 跳转登录
   if (to.meta.requiresAuth && !userStore.token) {

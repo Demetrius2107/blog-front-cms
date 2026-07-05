@@ -136,6 +136,7 @@ import { getArticleDetailApi, likeArticleApi, viewArticleApi, type Article } fro
 import { getCommentListApi, createCommentApi, replyCommentApi, type Comment } from '@/api/comment'
 import { useUserStore } from '@/store/modules/user'
 import dayjs from 'dayjs'
+import logger from '@/utils/logger'
 
 const route = useRoute()
 const userStore = useUserStore()

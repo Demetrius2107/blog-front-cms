@@ -33,6 +33,7 @@ import { useUserStore } from '@/store/modules/user'
 import { loginApi } from '@/api/auth'
 import { getUserInfoApi } from '@/api/user'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
+import logger from '@/utils/logger'
 
 const router = useRouter()
 const route = useRoute()
@@ -51,6 +52,13 @@ async function handleLogin() {
   const valid = await formRef.value?.validate().catch(() => false)
   if (!valid) return
 
+  // █████████████████████████████████████████████████████████████████
+  // 🎯 埋点: 用户登录
+  //    记录登录请求的用户名（不记录密码）
+  //    配合后端追踪登录失败原因（账号不存在/密码错误/账号禁用）
+  // █████████████████████████████████████████████████████████████████
+  logger.info('AUTH', `登录尝试: ${loginForm.username}`)
+
   loading.value = true
   try {
     const res = await loginApi(loginForm)
@@ -60,9 +68,19 @@ async function handleLogin() {
     const userRes = await getUserInfoApi()
     userStore.setUserInfo(userRes.data)
 
+    logger.success('AUTH', `登录成功: ${loginForm.username}`, {
+      role: userRes.data?.role,
+      redirect: route.query.redirect
+    })
+
     ElMessage.success('登录成功')
     router.push((route.query.redirect as string) || '/')
-  } catch {
+  } catch (err) {
+    // █████████████████████████████████████████████████████████████████
+    // 🎯 埋点: 登录失败
+    //    记录失败原因（密码错误/账号不存在/服务异常）
+    // █████████████████████████████████████████████████████████████████
+    logger.warn('AUTH', `登录失败: ${loginForm.username}`, { error: (err as any)?.message })
     // 错误已在拦截器中处理
   } finally {
     loading.value = false
