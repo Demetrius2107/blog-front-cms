@@ -1,14 +1,16 @@
-# MyBlog 博客前端
+# Vellastra 前端
 
-> **Blog-Front-MS** — 基于 Vue 3 + TypeScript + Element Plus 构建的博客前端项目，支持博客前台浏览与后台管理双模式。
+> **Vellastra Content System (星垂野内容系统)** — 基于 Vue 3 + TypeScript + Element Plus 构建的内容系统前端，支持前台浏览与后台管理双模式。
 
 ---
 
 ## 📋 项目概览
 
-本项目是一个面向用户的博客前端系统，采用 **博客前台 + 后台管理** 的双布局架构：
+**Vellastra** = *vellus*（覆盖万物的毯子）+ *astra*（群星），取"星辰如毡毯覆盖原野"之意，对应杜甫《旅夜书怀》"星垂平野阔，月涌大江流"的意境。
 
-- 🏠 **博客前台** (`/`) — 首页文章列表、文章详情、评论互动、用户注册/登录
+本项目是 **Vellastra 内容系统** 的前端界面，采用 **博客前台 + 后台管理** 的双布局架构：
+
+- 🏠 **内容前台** (`/`) — 首页文章列表、文章详情、评论互动、用户注册/登录
 - 👤 **用户中心** (`/user/*`) — 写文章、我的文章、个人资料管理
 - 🔧 **后台管理** (`/admin/*`) — 仪表盘、文章管理、分类管理、标签管理、评论管理、用户管理、系统设置
 
@@ -30,7 +32,7 @@
 ## 📁 项目结构
 
 ```
-blog-front-ms/
+vellastra-front-ms/
 ├── public/                        # 静态资源（favicon 等）
 │   └── vite.svg
 ├── src/
@@ -45,13 +47,13 @@ blog-front-ms/
 │   ├── assets/                    # 静态资源
 │   │   └── logo.svg
 │   ├── layouts/                   # 布局组件
-│   │   ├── BlogLayout.vue         #   博客前台布局（顶部导航 + 分类 + 页脚）
+│   │   ├── BlogLayout.vue         #   内容前台布局（顶部导航 + 分类 + 页脚）
 │   │   ├── MainLayout.vue         #   后台管理布局（侧边栏 + 导航栏）
 │   │   └── components/
 │   │       ├── Navbar.vue         #     顶部导航栏
 │   │       └── Sidebar.vue        #     侧边栏菜单
 │   ├── router/
-│   │   └── index.ts               # 路由配置（博客前台 / 用户中心 / 后台管理）
+│   │   └── index.ts               # 路由配置（内容前台 / 用户中心 / 后台管理）
 │   ├── store/
 │   │   └── modules/
 │   │       ├── user.ts            # 用户状态（token、userInfo、userId）
@@ -63,7 +65,7 @@ blog-front-ms/
 │   │   ├── request.ts             # Axios 实例（/api 前缀、拦截器）
 │   │   └── authRequest.ts         # Axios 实例（/auth 前缀，用于鉴权）
 │   ├── views/
-│   │   ├── blog/                  # 博客前台页面
+│   │   ├── blog/                  # 内容前台页面
 │   │   │   ├── Home.vue           #   首页（文章列表 + 分类筛选 + 分页）
 │   │   │   ├── ArticleDetail.vue  #   文章详情（内容 + 评论 + 点赞）
 │   │   │   └── Register.vue       #   用户注册
@@ -118,16 +120,16 @@ npm run preview
 
 ### 后端依赖
 
-本项目需要配合 **[Blog-BackEnd-MS](https://github.com/your-repo/Blog-BackEnd-MS)** 后端使用，启动前端前请确保后端已启动：
+本项目需要配合 **Vellastra 内容系统后端**（原 Blog-BackEnd-MS）使用，启动前端前请确保后端已启动：
 
 - ✅ Nacos（服务注册中心，端口 8848）
 - ✅ MySQL（数据库，端口 3306）
 - ✅ Gateway 网关（端口 8080）
-- ✅ blog-auth 鉴权服务（端口 8081）
-- ✅ blog-user 用户服务（端口 8082）
-- ✅ blog-article 文章服务（端口 8083）
-- ✅ blog-category 分类服务（端口 8084）
-- ✅ blog-comment 评论服务（端口 8085）
+- ✅ vellastra-auth 鉴权服务（端口 8081）
+- ✅ vellastra-user 用户服务（端口 8082）
+- ✅ vellastra-article 文章服务（端口 8083）
+- ✅ vellastra-category 分类服务（端口 8084）
+- ✅ vellastra-comment 评论服务（端口 8085）
 
 > Vite 开发服务器已配置 `/api` 和 `/auth` 代理转发到 `localhost:8080`（Gateway）。
 

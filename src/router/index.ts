@@ -7,7 +7,7 @@ import logger from '@/utils/logger'
 NProgress.configure({ showSpinner: false })
 
 const routes = [
-  // ============ 博客前台 ============
+  // ============ 内容前台 ============
   {
     path: '/',
     component: () => import('@/layouts/BlogLayout.vue'),
@@ -54,6 +54,12 @@ const routes = [
         name: 'MyArticles',
         component: () => import('@/views/user/MyArticles.vue'),
         meta: { title: '我的文章', requiresAuth: true }
+      },
+      {
+        path: 'user/dashboard',
+        name: 'PersonalDashboard',
+        component: () => import('@/views/user/PersonalDashboard.vue'),
+        meta: { title: '个人管理', requiresAuth: true }
       },
       {
         path: 'user/profile',
@@ -149,14 +155,12 @@ const authWhiteList = ['/login', '/register']
 
 router.beforeEach((to, _from, next) => {
   NProgress.start()
-  document.title = `${to.meta.title || ''} - MyBlog`
+  document.title = `${to.meta.title || ''} - Vellastra`
 
   const userStore = useUserStore()
 
   // █████████████████████████████████████████████████████████████████
   // 🎯 埋点: 路由导航追踪
-  //    每次页面跳转都会记录来源页和目标页，
-  //    配合权限信息排查未登录跳转或权限拒绝问题
   // █████████████████████████████████████████████████████████████████
   logger.route(_from.path || '/', to.path, {
     title: to.meta.title,

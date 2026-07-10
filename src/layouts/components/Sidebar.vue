@@ -1,17 +1,10 @@
 <template>
   <div class="sidebar">
-    <div class="logo" :class="{ collapsed: appStore.sidebarCollapsed }">
-      <img src="@/assets/logo.svg" alt="logo" class="logo-img" />
-      <span v-show="!appStore.sidebarCollapsed" class="logo-text">博客管理</span>
-    </div>
     <el-scrollbar>
       <el-menu
         :default-active="activeMenu"
         :collapse="appStore.sidebarCollapsed"
         :collapse-transition="false"
-        background-color="#304156"
-        text-color="#bfcbd9"
-        active-text-color="#409eff"
         router
         unique-opened
       >
@@ -60,37 +53,59 @@ const menuRoutes = computed(() => {
   height: 100%;
   display: flex;
   flex-direction: column;
-}
-
-.logo {
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 16px;
-  overflow: hidden;
-
-  &.collapsed {
-    justify-content: center;
-    padding: 0;
-  }
-
-  .logo-img {
-    width: 32px;
-    height: 32px;
-    flex-shrink: 0;
-  }
-
-  .logo-text {
-    margin-left: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #fff;
-    white-space: nowrap;
-  }
+  padding: 8px 0;
 }
 
 .el-menu {
   border-right: none;
+  background: transparent;
+  --el-menu-bg-color: transparent;
+  --el-menu-text-color: rgba(255, 255, 255, 0.65);
+  --el-menu-active-color: #a78bfa;
+  --el-menu-hover-bg-color: rgba(167, 139, 250, 0.1);
+  --el-menu-hover-text-color: #fff;
+}
+
+:deep(.el-menu-item) {
+  border-radius: 8px;
+  margin: 2px 8px;
+  padding: 0 12px;
+  transition: all 0.2s;
+
+  &:hover {
+    background: rgba(167, 139, 250, 0.1);
+    color: #fff;
+  }
+
+  &.is-active {
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.3), rgba(167, 139, 250, 0.15));
+    color: #a78bfa;
+    font-weight: 500;
+  }
+}
+
+:deep(.el-sub-menu__title) {
+  border-radius: 8px;
+  margin: 2px 8px;
+  color: rgba(255, 255, 255, 0.65);
+  transition: all 0.2s;
+
+  &:hover {
+    background: rgba(167, 139, 250, 0.1);
+    color: #fff;
+  }
+}
+
+:deep(.el-menu--collapse) {
+  .el-menu-item,
+  .el-sub-menu__title {
+    margin: 2px 6px;
+    padding: 0 8px;
+    justify-content: center;
+  }
+}
+
+:deep(.el-icon) {
+  color: inherit;
 }
 </style>

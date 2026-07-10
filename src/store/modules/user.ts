@@ -50,7 +50,7 @@ export const useUserStore = defineStore(
   },
   {
     persist: {
-      key: 'blog-user-store',
+      key: 'vellastra-user-store',
       storage: localStorage,
       paths: ['token', 'userInfo', 'userId']
     }

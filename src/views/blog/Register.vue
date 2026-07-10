@@ -97,6 +97,8 @@ async function handleRegister() {
     })
     ElMessage.success('注册成功，请登录')
     router.push('/login')
+  } catch (err: any) {
+    ElMessage.error(err?.response?.data?.message || err?.message || '注册失败，请稍后重试')
   } finally {
     loading.value = false
   }

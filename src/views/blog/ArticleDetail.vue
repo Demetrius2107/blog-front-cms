@@ -130,13 +130,41 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { getArticleDetailApi, likeArticleApi, viewArticleApi, type Article } from '@/api/article'
 import { getCommentListApi, createCommentApi, replyCommentApi, type Comment } from '@/api/comment'
 import { useUserStore } from '@/store/modules/user'
 import dayjs from 'dayjs'
 import logger from '@/utils/logger'
+
+/**
+ * 安全过滤 HTML，移除 script 标签、事件处理器属性及危险标签
+ */
+function sanitizeHtml(html: string): string {
+  const temp = document.createElement('div')
+  temp.innerHTML = html
+  // 移除 script 标签及其内容
+  temp.querySelectorAll('script').forEach((el) => el.remove())
+  // 移除所有元素上的事件处理器属性 (onclick, onerror, ...)
+  temp.querySelectorAll('*').forEach((el) => {
+    Array.from(el.attributes).forEach((attr) => {
+      if (attr.name.startsWith('on')) {
+        el.removeAttribute(attr.name)
+      }
+    })
+  })
+  // 移除危险的内嵌元素
+  temp.querySelectorAll('iframe, object, embed, frame').forEach((el) => el.remove())
+  // 移除 href/javascript: 和 href/data: 的链接
+  temp.querySelectorAll('a[href]').forEach((el) => {
+    const href = el.getAttribute('href')?.toLowerCase() || ''
+    if (href.startsWith('javascript:') || href.startsWith('data:')) {
+      el.removeAttribute('href')
+    }
+  })
+  return temp.innerHTML
+}
 
 const route = useRoute()
 const userStore = useUserStore()
@@ -168,7 +196,7 @@ async function fetchArticle() {
   try {
     const res = await getArticleDetailApi(Number(id))
     article.value = res.data
-    renderedContent.value = res.data.content || ''
+    renderedContent.value = sanitizeHtml(res.data.content || '')
   } catch {
     article.value = null
   } finally {

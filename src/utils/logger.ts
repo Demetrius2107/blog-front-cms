@@ -12,7 +12,7 @@
  * 生产环境默认关闭。
  */
 
-const DEBUG_KEY = 'blog-debug'
+const DEBUG_KEY = 'vellastra-debug'
 
 function isEnabled(): boolean {
   try {
@@ -23,7 +23,7 @@ function isEnabled(): boolean {
 }
 
 function prefix(tag: string): string {
-  return `[Blog ${tag}]`
+  return `[Vellastra ${tag}]`
 }
 
 const logger = {

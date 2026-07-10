@@ -1,5 +1,8 @@
 @use './variables.scss' as *;
 
+// ============================================
+// 全局重置 & 基础样式
+// ============================================
 * {
   margin: 0;
   padding: 0;
@@ -11,9 +14,11 @@ body {
   width: 100%;
   height: 100%;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    'Helvetica Neue', Arial, sans-serif;
+    'Helvetica Neue', Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: $bg-color;
+  color: $text-primary;
 }
 
 a {
@@ -21,25 +26,176 @@ a {
   color: inherit;
 }
 
-ul,
-ol {
+ul, ol {
   list-style: none;
 }
 
+// ============================================
+// 滚动条
+// ============================================
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 ::-webkit-scrollbar-thumb {
   background-color: #c0c4cc;
   border-radius: 3px;
-
   &:hover {
     background-color: #909399;
   }
 }
 
+// ============================================
+// NProgress 进度条
+// ============================================
 #nprogress .bar {
-  background: $primary-color !important;
+  background: $gradient-primary !important;
+  height: 3px !important;
+}
+
+// ============================================
+// 星星背景动画 (CSS 纯星场)
+// ============================================
+.star-field {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+// 小星星
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  animation: twinkle var(--duration) ease-in-out infinite alternate;
+}
+
+@keyframes twinkle {
+  0% {
+    opacity: 0.2;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+// 流星
+.shooting-star {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 6px 2px rgba(255, 255, 255, 0.6);
+  animation: shoot 3s linear infinite;
+}
+
+.shooting-star::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(to left, rgba(255, 255, 255, 0.8), transparent);
+  transform: rotate(0deg);
+  transform-origin: right center;
+}
+
+@keyframes shoot {
+  0% {
+    transform: translate(0, 0) rotate(-35deg);
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-600px, 400px) rotate(-35deg);
+    opacity: 0;
+  }
+}
+
+// ============================================
+// 紫色渐变玻璃卡片
+// ============================================
+.glass-card {
+  background: $bg-card;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(124, 58, 237, 0.1);
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-md;
+}
+
+// ============================================
+// 紫色按钮风格
+// ============================================
+.vellastra-btn {
+  background: $gradient-primary;
+  color: $text-on-primary;
+  border: none;
+  border-radius: $border-radius;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
+
+  &:hover {
+    box-shadow: 0 4px 16px rgba(124, 58, 237, 0.5);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// ============================================
+// 紫色渐变标题
+// ============================================
+.gradient-text {
+  background: $gradient-primary;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// ============================================
+// 过渡动画
+// ============================================
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: all 0.3s ease;
+}
+.fade-slide-enter-from {
+  opacity: 0;
+  transform: translateY(12px);
+}
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-12px);
 }
