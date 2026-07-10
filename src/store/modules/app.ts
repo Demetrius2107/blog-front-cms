@@ -19,7 +19,7 @@ export const useAppStore = defineStore(
   },
   {
     persist: {
-      key: 'blog-app-store',
+      key: 'vellastra-app-store',
       storage: localStorage,
       paths: ['sidebarCollapsed']
     }

@@ -2,11 +2,12 @@ import { createRouter, createWebHistory } from 'vue-router'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { useUserStore } from '@/store/modules/user'
+import logger from '@/utils/logger'
 
 NProgress.configure({ showSpinner: false })
 
 const routes = [
-  // ============ 博客前台 ============
+  // ============ 内容前台 ============
   {
     path: '/',
     component: () => import('@/layouts/BlogLayout.vue'),
@@ -53,6 +54,12 @@ const routes = [
         name: 'MyArticles',
         component: () => import('@/views/user/MyArticles.vue'),
         meta: { title: '我的文章', requiresAuth: true }
+      },
+      {
+        path: 'user/dashboard',
+        name: 'PersonalDashboard',
+        component: () => import('@/views/user/PersonalDashboard.vue'),
+        meta: { title: '个人管理', requiresAuth: true }
       },
       {
         path: 'user/profile',
@@ -148,9 +155,20 @@ const authWhiteList = ['/login', '/register']
 
 router.beforeEach((to, _from, next) => {
   NProgress.start()
-  document.title = `${to.meta.title || ''} - MyBlog`
+  document.title = `${to.meta.title || ''} - Vellastra`
 
   const userStore = useUserStore()
+
+  // █████████████████████████████████████████████████████████████████
+  // 🎯 埋点: 路由导航追踪
+  // █████████████████████████████████████████████████████████████████
+  logger.route(_from.path || '/', to.path, {
+    title: to.meta.title,
+    requiresAuth: !!to.meta.requiresAuth,
+    requiresAdmin: !!to.meta.requiresAdmin,
+    hasToken: !!userStore.token,
+    role: userStore.userInfo?.role
+  })
 
   // 需要登录但未登录 → 跳转登录
   if (to.meta.requiresAuth && !userStore.token) {

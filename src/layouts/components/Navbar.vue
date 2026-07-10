@@ -5,7 +5,7 @@
         <Fold v-if="!appStore.sidebarCollapsed" />
         <Expand v-else />
       </el-icon>
-      <el-breadcrumb separator="/">
+      <el-breadcrumb separator="/" class="purple-breadcrumb">
         <el-breadcrumb-item v-for="item in breadcrumbs" :key="item.path">
           {{ item.meta?.title }}
         </el-breadcrumb-item>
@@ -14,7 +14,7 @@
     <div class="navbar-right">
       <el-dropdown trigger="click" @command="handleCommand">
         <span class="user-info">
-          <el-avatar :size="30" :src="userStore.userInfo.avatar || ''">
+          <el-avatar :size="32" :src="userStore.userInfo.avatar || ''" class="user-avatar">
             {{ userStore.userInfo.username?.charAt(0)?.toUpperCase() }}
           </el-avatar>
           <span class="username">{{ userStore.userInfo.username || '管理员' }}</span>
@@ -23,6 +23,7 @@
         <template #dropdown>
           <el-dropdown-menu>
             <el-dropdown-item command="profile">个人中心</el-dropdown-item>
+            <el-dropdown-item command="home">返回首页</el-dropdown-item>
             <el-dropdown-item command="logout" divided>退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </template>
@@ -46,7 +47,11 @@ const userStore = useUserStore()
 const breadcrumbs = computed(() => route.matched.filter((item) => item.meta?.title))
 
 function handleCommand(command: string) {
-  if (command === 'logout') {
+  if (command === 'profile') {
+    router.push('/user/profile')
+  } else if (command === 'home') {
+    router.push('/')
+  } else if (command === 'logout') {
     ElMessageBox.confirm('确定退出登录吗？', '提示', { type: 'warning' }).then(() => {
       userStore.logout()
       router.push('/login')
@@ -61,7 +66,7 @@ function handleCommand(command: string) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
+  padding: 0 24px;
 }
 
 .navbar-left {
@@ -72,11 +77,25 @@ function handleCommand(command: string) {
   .collapse-btn {
     font-size: 20px;
     cursor: pointer;
-    color: $text-regular;
+    color: rgba(255, 255, 255, 0.5);
+    transition: color 0.2s;
 
     &:hover {
-      color: $primary-color;
+      color: #a78bfa;
     }
+  }
+}
+
+.purple-breadcrumb {
+  :deep(.el-breadcrumb__inner) {
+    color: rgba(255, 255, 255, 0.5);
+  }
+  :deep(.el-breadcrumb__inner.is-link) {
+    color: rgba(255, 255, 255, 0.5);
+    &:hover { color: #a78bfa; }
+  }
+  :deep(.el-breadcrumb__separator) {
+    color: rgba(255, 255, 255, 0.2);
   }
 }
 
@@ -86,11 +105,28 @@ function handleCommand(command: string) {
     align-items: center;
     cursor: pointer;
     gap: 8px;
+    padding: 4px 12px;
+    border-radius: 8px;
+    transition: background 0.2s;
 
-    .username {
-      font-size: 14px;
-      color: $text-primary;
+    &:hover {
+      background: rgba(255, 255, 255, 0.05);
     }
+  }
+
+  .user-avatar {
+    border: 2px solid rgba(167, 139, 250, 0.3);
+    background: linear-gradient(135deg, #7c3aed, #a78bfa);
+  }
+
+  .username {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+  }
+
+  .el-icon {
+    color: rgba(255, 255, 255, 0.4);
   }
 }
 </style>

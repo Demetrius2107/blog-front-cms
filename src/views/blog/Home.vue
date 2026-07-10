@@ -82,6 +82,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { getArticleListApi, type Article } from '@/api/article'
 import { getCategoryTreeApi } from '@/api/category'
 import dayjs from 'dayjs'
+import logger from '@/utils/logger'
 
 const route = useRoute()
 const router = useRouter()
@@ -101,6 +102,18 @@ function formatDate(date?: string) {
 
 async function fetchArticles() {
   loading.value = true
+
+  // █████████████████████████████████████████████████████████████████
+  // 🎯 埋点: 加载文章列表
+  //    记录分页参数和筛选条件，排查列表加载异常
+  // █████████████████████████████████████████████████████████████████
+  logger.info('ARTICLE', '获取文章列表', {
+    page: current.value,
+    size: size.value,
+    categoryId: currentCategoryId.value,
+    keyword: keyword.value
+  })
+
   try {
     const params: any = {
       current: current.value,
@@ -116,8 +129,19 @@ async function fetchArticles() {
     const data = res.data
     articles.value = data.records || []
     total.value = data.total || 0
+
+    // █████████████████████████████████████████████████████████████████
+    // 🎯 埋点: 文章列表加载成功
+    //    记录返回的文章数量和分页信息
+    // █████████████████████████████████████████████████████████████████
+    logger.success('ARTICLE', `文章列表加载成功`, {
+      count: articles.value.length,
+      total: total.value,
+      page: current.value
+    })
   } catch {
     articles.value = []
+    logger.error('ARTICLE', '文章列表加载失败')
   } finally {
     loading.value = false
   }
@@ -127,8 +151,9 @@ async function fetchCategories() {
   try {
     const res = await getCategoryTreeApi()
     categories.value = res.data || []
+    logger.success('CATEGORY', `分类加载成功`, { count: categories.value.length })
   } catch {
-    // ignore
+    logger.warn('CATEGORY', '分类加载失败（不影响主流程）')
   }
 }
 
