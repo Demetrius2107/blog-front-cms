@@ -1,6 +1,7 @@
 node_modules
 dist
 dist-ssr
+dist-electron
 *.local
 .DS_Store
 auto-imports.d.ts
@@ -8,3 +9,6 @@ components.d.ts
 *.log
 .env.local
 .env.*.local
+*.tsbuildinfo
+apps/mobile/android
+apps/mobile/ios
