@@ -1,0 +1,9 @@
+{
+  "appId": "com.vellastra.mobile",
+  "appName": "Vellastra",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  }
+}
